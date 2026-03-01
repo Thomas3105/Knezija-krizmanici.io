@@ -51,6 +51,8 @@ body{
   transition:transform .15s ease, border-color .15s ease;
   position:relative;
   overflow:hidden;
+    min-height:140px;
+  height:auto;
 }
 .card:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.18)}
 .card h2{margin:0 0 6px;font-size:18px}
