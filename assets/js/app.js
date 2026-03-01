@@ -118,3 +118,55 @@ async function renderSocial(path, targetId){
     </a>
   `).join("") || `<p class="muted">Nema linkova.</p>`;
 }
+// List page: creates cards linking to lesson.html?id=...
+async function renderKatehezeList(path, targetId){
+  const data = await fetchJson(path);
+  data.sort((a,b)=> String(b.date ?? "").localeCompare(String(a.date ?? "")));
+
+  qs(targetId).innerHTML = `
+    <div class="grid">
+      ${data.map(x => `
+        <a class="card" href="lesson.html?id=${encodeURIComponent(x.id)}">
+          <h2>${escapeHtml(x.title || "Bez naslova")}</h2>
+          <p>${escapeHtml(x.date || "")}</p>
+          <span class="chip">Otvori</span>
+        </a>
+      `).join("")}
+    </div>
+  `;
+}
+
+// Lesson page: reads ?id= and renders title/text/images
+async function renderLessonPage(path){
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+
+  const data = await fetchJson(path);
+  const lesson = data.find(x => String(x.id) === String(id));
+
+  if(!lesson){
+    qs("lessonTitle").textContent = "Lekcija nije pronađena";
+    qs("lessonMeta").textContent = "";
+    qs("lessonText").innerHTML = "Provjeri link ili ID u kateheze.json.";
+    return;
+  }
+
+  document.title = lesson.title || "Lekcija";
+  qs("lessonTitle").textContent = lesson.title || "Lekcija";
+  qs("lessonMeta").textContent = lesson.date || "";
+  qs("lessonText").innerHTML = nl2br(lesson.text || "");
+
+  const imgs = Array.isArray(lesson.images) ? lesson.images : [];
+  const gallery = qs("lessonGallery");
+
+  if(imgs.length === 0){
+    gallery.innerHTML = `<p class="muted">Nema slika za ovu lekciju.</p>`;
+    return;
+  }
+
+  gallery.innerHTML = imgs.map(src => `
+    <a class="photo" href="${src}" target="_blank" rel="noopener">
+      <img src="${src}" alt="Slika" loading="lazy" />
+    </a>
+  `).join("");
+}
