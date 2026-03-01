@@ -1,7 +1,7 @@
-// ---------- helpers ----------
 function qs(id){ return document.getElementById(id); }
 
-const BASE = "/Knezija-krizmanici.io"; // your repo name (GitHub Pages project site)
+// GitHub Pages project site base (repo name)
+const BASE = "/Knezija-krizmanici.io";
 
 async function fetchJson(path){
   const res = await fetch(path, { cache: "no-store" });
@@ -22,22 +22,20 @@ function nl2br(str){
   return escapeHtml(str).replaceAll("\n","<br>");
 }
 
-// **bold** and *italic* support + new lines
+// Supports **bold** and *italic* (safe) + new lines
 function formatText(str){
   if(!str) return "";
-  const safe = escapeHtml(str);
-  return safe
+  return escapeHtml(str)
     .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
     .replace(/\*(.*?)\*/g, "<i>$1</i>")
     .replaceAll("\n","<br>");
 }
 
-// ---------- Kateheze list page ----------
+// ---- Kateheze list page (cards) ----
 async function renderKatehezeList(path, targetId){
   const data = await fetchJson(path);
   if(!Array.isArray(data)) throw new Error("kateheze.json must be an array []");
 
-  // newest first
   data.sort((a,b)=> String(b.date ?? "").localeCompare(String(a.date ?? "")));
 
   qs(targetId).innerHTML = `
@@ -53,11 +51,11 @@ async function renderKatehezeList(path, targetId){
   `;
 }
 
-// ---------- Lesson page (folder-based) ----------
+// ---- Lesson page (folder URL) ----
 async function loadLessonFromFolder(){
-  // URL like: /Knezija-krizmanici.io/kateheze/svetost-put-ka-sreci/
+  // URL: /Knezija-krizmanici.io/kateheze/<slug>/
   const parts = location.pathname.split("/").filter(Boolean);
-  const slug = parts[parts.length - 1]; // last segment should be slug
+  const slug = parts[parts.length - 1];
 
   const data = await fetchJson(`${BASE}/data/kateheze.json`);
   const lesson = Array.isArray(data) ? data.find(x => x.slug === slug) : null;
@@ -66,6 +64,7 @@ async function loadLessonFromFolder(){
     qs("title").textContent = "Lekcija nije pronađena";
     qs("date").textContent = "";
     qs("text").innerHTML = "Provjeri slug/folder i kateheze.json.";
+    qs("gallery").innerHTML = "";
     return;
   }
 
@@ -74,8 +73,8 @@ async function loadLessonFromFolder(){
   qs("date").textContent = lesson.date || "";
   qs("text").innerHTML = nl2br(lesson.text || "");
 
-  const gallery = qs("gallery");
   const imgs = Array.isArray(lesson.images) ? lesson.images : [];
+  const gallery = qs("gallery");
 
   if(imgs.length === 0){
     gallery.innerHTML = `<p class="muted">Nema slika za ovu lekciju.</p>`;
