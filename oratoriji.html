@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Oratoriji</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="btn" href="index.html">← Nazad</a>
+      </div>
+      <h1 class="title">Oratoriji</h1>
+      <p class="subtitle">Najave i informacije (uređuješ u <code>data/oratoriji.json</code>)</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="posts"></div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    renderPosts("data/oratoriji.json", "posts");
+  </script>
+</body>
+</html>
