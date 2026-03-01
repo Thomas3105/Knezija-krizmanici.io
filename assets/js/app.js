@@ -97,3 +97,24 @@ async function renderPosts(path, targetId){
     </div>
   `).join("") || `<p class="muted">Nema objava.</p>`;
 }
+/* DRUSTVENE MREZE: [{name,url,description}] */
+async function renderSocial(path, targetId){
+  const data = await fetchJson(path);
+
+  const icons = {
+    "TikTok":"🎵",
+    "YouTube":"▶️",
+    "Instagram":"📷",
+    "Facebook":"📘"
+  };
+
+  qs(targetId).innerHTML = data.map(x => `
+    <a href="${x.url}" target="_blank" class="item" style="display:block;text-decoration:none;color:inherit">
+      <h3>${icons[x.name] || "🔗"} ${escapeHtml(x.name)}</h3>
+      <p class="muted">${escapeHtml(x.description || "")}</p>
+      <div class="meta">
+        <span>${escapeHtml(x.url)}</span>
+      </div>
+    </a>
+  `).join("") || `<p class="muted">Nema linkova.</p>`;
+}
