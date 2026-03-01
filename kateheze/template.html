@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title id="lessonTitle">Kateheza</title>
+  <link rel="stylesheet" href="/Knezija-krizmanici.io/assets/css/style.css">
+</head>
+
+<body>
+<header class="topbar">
+  <div class="container">
+    <div class="row">
+      <a class="btn" href="/Knezija-krizmanici.io/kateheze.html">← Sve kateheze</a>
+      <a class="btn" href="/Knezija-krizmanici.io/index.html">Početna</a>
+    </div>
+    <h1 class="title" id="title"></h1>
+    <p class="subtitle" id="date"></p>
+  </div>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <div id="text" class="muted"></div>
+  </section>
+
+  <section id="gallery" class="gallery" style="margin-top:18px;"></section>
+</main>
+
+<script src="/Knezija-krizmanici.io/assets/js/app.js"></script>
+<script>
+loadLessonFromFolder();
+</script>
+</body>
+</html>
