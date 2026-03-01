@@ -4,14 +4,29 @@
     "slug": "svetost-put-ka-sreci",
     "date": "2026-03-01",
     "title": "Svetost – put ka sreći",
-    "text": "Bog te ne želi ograničiti nego ispuniti.",
-    "images": [
+
+    "content": [
       {
+        "type": "paragraph",
+        "text": "Bog te ne želi ograničiti nego ispuniti."
+      },
+
+      {
+        "type": "image",
         "src": "images/lessons/svetost/slika1.jpg",
         "caption": "Blaženstva",
         "note": "Isus pokazuje **kako postati svet**."
+      },
+
+      {
+        "type": "paragraph",
+        "text": "Svetost nije rezervirana za svece iz kipova. Ona je poziv svakog kršćanina."
+      },
+
+      {
+        "type": "quote",
+        "text": "Blago čistima srcem: oni će Boga gledati. (Mt 5,8)"
       }
     ]
-
   }
 ]
