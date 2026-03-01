@@ -1,14 +1,14 @@
-[
-  {
-    "id": "lekcija-1",
-    "date": "2026-03-01",
-    "title": "1. Kateheza – Uvod",
-    "text": "Tema: Zašto krizma?\nZadatak: pročitaj Mk 1,9–11."
-  },
-  {
-    "id": "lekcija-2",
-    "date": "2026-03-08",
-    "title": "2. Kateheza – Duh Sveti",
-    "text": "Što radi Duh Sveti?\nPrimjeri iz Dj 2."
-  }
-]
+{
+  "id": "1",
+  "slug": "svetost-put-ka-sreci",
+  "date": "2026-03-01",
+  "title": "Svetost – put ka sreći",
+  "text": "Bog te ne želi ograničiti nego ispuniti.",
+  "images": [
+    {
+      "src": "images/lessons/svetost/slika1.jpg",
+      "caption": "Blaženstva",
+      "note": "Isus pokazuje **kako postati svet**."
+    }
+  ]
+}
