@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hrvatski TikTok riječnik</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="btn" href="index.html">← Nazad</a>
+        <input id="search" class="input" placeholder="Pretraži pojam ili značenje…" />
+      </div>
+      <h1 class="title">Hrvatski TikTok riječnik</h1>
+      <p class="subtitle">Uredi pojmove u <code>data/rjecnik.json</code></p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="rjecnikList"></div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    renderRjecnik("data/rjecnik.json", "rjecnikList", "search");
+  </script>
+</body>
+</html>
