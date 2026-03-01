@@ -1,14 +1,10 @@
-{
-  "id": "1",
-  "slug": "svetost-put-ka-sreci",
-  "date": "2026-03-01",
-  "title": "Svetost – put ka sreći",
-  "text": "Bog te ne želi ograničiti nego ispuniti.",
-  "images": [
-    {
-      "src": "images/lessons/svetost/slika1.jpg",
-      "caption": "Blaženstva",
-      "note": "Isus pokazuje **kako postati svet**."
-    }
-  ]
-}
+[
+  {
+    "id": "1",
+    "slug": "svetost-put-ka-sreci",
+    "date": "2026-03-01",
+    "title": "Svetost – put ka sreći",
+    "text": "Bog te ne želi ograničiti nego ispuniti.",
+
+  }
+]
