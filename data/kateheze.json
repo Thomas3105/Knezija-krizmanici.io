@@ -1,7 +1,14 @@
 [
   {
+    "id": "lekcija-1",
     "date": "2026-03-01",
     "title": "1. Kateheza – Uvod",
     "text": "Tema: Zašto krizma?\nZadatak: pročitaj Mk 1,9–11."
+  },
+  {
+    "id": "lekcija-2",
+    "date": "2026-03-08",
+    "title": "2. Kateheza – Duh Sveti",
+    "text": "Što radi Duh Sveti?\nPrimjeri iz Dj 2."
   }
 ]
