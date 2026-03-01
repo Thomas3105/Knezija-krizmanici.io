@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Snepanje s Bogom</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="btn" href="index.html">← Nazad</a>
+      </div>
+      <h1 class="title">Snepanje s Bogom</h1>
+      <p class="subtitle">Pitanja i odgovori (FAQ)</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="faqList"></div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    renderFaq("data/faq.json", "faqList");
+  </script>
+</body>
+</html>
