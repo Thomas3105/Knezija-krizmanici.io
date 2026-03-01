@@ -170,3 +170,29 @@ async function renderLessonPage(path){
     </a>
   `).join("");
 }
+async function loadLessonFromFolder(){
+  const parts = location.pathname.split("/");
+  const slug = parts[parts.length-2]; // folder name
+
+  const data = await fetchJson("/Knezija-krizmanici.io/data/kateheze.json");
+  const lesson = data.find(x => x.slug === slug);
+
+  if(!lesson){
+    document.getElementById("title").textContent = "Lekcija nije pronađena";
+    return;
+  }
+
+  document.title = lesson.title;
+  qs("title").textContent = lesson.title;
+  qs("date").textContent = lesson.date;
+  qs("text").innerHTML = nl2br(lesson.text);
+
+  const gallery = qs("gallery");
+  gallery.innerHTML = (lesson.images || []).map(img => `
+    <div class="photoCard">
+      <img src="/Knezija-krizmanici.io/${img.src}" loading="lazy">
+      ${img.caption ? `<div class="caption">${img.caption}</div>` : ""}
+      ${img.note ? `<div class="note">${formatText(img.note)}</div>` : ""}
+    </div>
+  `).join("");
+}
