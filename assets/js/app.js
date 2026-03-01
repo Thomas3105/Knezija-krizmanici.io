@@ -1,4 +1,7 @@
+// ---------- helpers ----------
 function qs(id){ return document.getElementById(id); }
+
+const BASE = "/Knezija-krizmanici.io"; // your repo name (GitHub Pages project site)
 
 async function fetchJson(path){
   const res = await fetch(path, { cache: "no-store" });
@@ -19,114 +22,28 @@ function nl2br(str){
   return escapeHtml(str).replaceAll("\n","<br>");
 }
 
-/* KATEHEZE: [{date,title,text}] */
-async function renderKateheze(path, targetId){
-  const data = await fetchJson(path);
-  data.sort((a,b)=> String(b.date ?? "").localeCompare(String(a.date ?? "")));
-
-  const html = data.map(x => `
-    <details>
-      <summary>
-        ${escapeHtml(x.title || "Bez naslova")}
-        <span class="metaInline">${escapeHtml(x.date || "")}</span>
-      </summary>
-      <div class="spacer"></div>
-      <div class="muted">${nl2br(x.text || "")}</div>
-    </details>
-  `).join("");
-
-  qs(targetId).innerHTML = html || `<p class="muted">Nema sadržaja.</p>`;
+// **bold** and *italic* support + new lines
+function formatText(str){
+  if(!str) return "";
+  const safe = escapeHtml(str);
+  return safe
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    .replace(/\*(.*?)\*/g, "<i>$1</i>")
+    .replaceAll("\n","<br>");
 }
 
-/* FAQ: [{q,a}] */
-async function renderFaq(path, targetId){
-  const data = await fetchJson(path);
-  const html = data.map(x => `
-    <details>
-      <summary>${escapeHtml(x.q || "Pitanje")}</summary>
-      <div class="spacer"></div>
-      <div class="muted">${nl2br(x.a || "")}</div>
-    </details>
-  `).join("");
-
-  qs(targetId).innerHTML = html || `<p class="muted">Nema pitanja.</p>`;
-}
-
-/* RJEČNIK: [{term,meaning,example}] with search */
-async function renderRjecnik(path, targetId, searchInputId){
-  const data = await fetchJson(path);
-  data.sort((a,b)=> String(a.term ?? "").localeCompare(String(b.term ?? "")));
-
-  function draw(filter){
-    const f = (filter || "").trim().toLowerCase();
-    const rows = data.filter(x=>{
-      const term = String(x.term ?? "").toLowerCase();
-      const meaning = String(x.meaning ?? "").toLowerCase();
-      return !f || term.includes(f) || meaning.includes(f);
-    });
-
-    qs(targetId).innerHTML = rows.map(x => `
-      <div class="item">
-        <h3>${escapeHtml(x.term || "")}</h3>
-        <div class="meta">
-          <span>${escapeHtml(x.meaning || "")}</span>
-        </div>
-        ${x.example ? `<p class="muted">${nl2br(x.example)}</p>` : ""}
-      </div>
-    `).join("") || `<p class="muted">Nema rezultata.</p>`;
-  }
-
-  const input = qs(searchInputId);
-  input.addEventListener("input", () => draw(input.value));
-  draw("");
-}
-
-/* ORATORIJI: [{date,title,tag,text}] */
-async function renderPosts(path, targetId){
-  const data = await fetchJson(path);
-  data.sort((a,b)=> String(b.date ?? "").localeCompare(String(a.date ?? "")));
-
-  qs(targetId).innerHTML = data.map(x => `
-    <div class="item">
-      <h3>${escapeHtml(x.title || "Objava")}</h3>
-      <div class="meta">
-        ${x.date ? `<span>${escapeHtml(x.date)}</span>` : ""}
-        ${x.tag ? `<span>• ${escapeHtml(x.tag)}</span>` : ""}
-      </div>
-      ${x.text ? `<p class="muted">${nl2br(x.text)}</p>` : ""}
-    </div>
-  `).join("") || `<p class="muted">Nema objava.</p>`;
-}
-/* DRUSTVENE MREZE: [{name,url,description}] */
-async function renderSocial(path, targetId){
-  const data = await fetchJson(path);
-
-  const icons = {
-    "TikTok":"🎵",
-    "YouTube":"▶️",
-    "Instagram":"📷",
-    "Facebook":"📘"
-  };
-
-  qs(targetId).innerHTML = data.map(x => `
-    <a href="${x.url}" target="_blank" class="item" style="display:block;text-decoration:none;color:inherit">
-      <h3>${icons[x.name] || "🔗"} ${escapeHtml(x.name)}</h3>
-      <p class="muted">${escapeHtml(x.description || "")}</p>
-      <div class="meta">
-        <span>${escapeHtml(x.url)}</span>
-      </div>
-    </a>
-  `).join("") || `<p class="muted">Nema linkova.</p>`;
-}
-// List page: creates cards linking to lesson.html?id=...
+// ---------- Kateheze list page ----------
 async function renderKatehezeList(path, targetId){
   const data = await fetchJson(path);
+  if(!Array.isArray(data)) throw new Error("kateheze.json must be an array []");
+
+  // newest first
   data.sort((a,b)=> String(b.date ?? "").localeCompare(String(a.date ?? "")));
 
   qs(targetId).innerHTML = `
     <div class="grid">
       ${data.map(x => `
-        <a class="card" href="lesson.html?id=${encodeURIComponent(x.id)}">
+        <a class="card" href="${BASE}/kateheze/${encodeURIComponent(x.slug)}/">
           <h2>${escapeHtml(x.title || "Bez naslova")}</h2>
           <p>${escapeHtml(x.date || "")}</p>
           <span class="chip">Otvori</span>
@@ -136,62 +53,41 @@ async function renderKatehezeList(path, targetId){
   `;
 }
 
-// Lesson page: reads ?id= and renders title/text/images
-async function renderLessonPage(path){
-  const params = new URLSearchParams(location.search);
-  const id = params.get("id");
+// ---------- Lesson page (folder-based) ----------
+async function loadLessonFromFolder(){
+  // URL like: /Knezija-krizmanici.io/kateheze/svetost-put-ka-sreci/
+  const parts = location.pathname.split("/").filter(Boolean);
+  const slug = parts[parts.length - 1]; // last segment should be slug
 
-  const data = await fetchJson(path);
-  const lesson = data.find(x => String(x.id) === String(id));
+  const data = await fetchJson(`${BASE}/data/kateheze.json`);
+  const lesson = Array.isArray(data) ? data.find(x => x.slug === slug) : null;
 
   if(!lesson){
-    qs("lessonTitle").textContent = "Lekcija nije pronađena";
-    qs("lessonMeta").textContent = "";
-    qs("lessonText").innerHTML = "Provjeri link ili ID u kateheze.json.";
+    qs("title").textContent = "Lekcija nije pronađena";
+    qs("date").textContent = "";
+    qs("text").innerHTML = "Provjeri slug/folder i kateheze.json.";
     return;
   }
 
-  document.title = lesson.title || "Lekcija";
-  qs("lessonTitle").textContent = lesson.title || "Lekcija";
-  qs("lessonMeta").textContent = lesson.date || "";
-  qs("lessonText").innerHTML = nl2br(lesson.text || "");
+  document.title = lesson.title || "Kateheza";
+  qs("title").textContent = lesson.title || "Kateheza";
+  qs("date").textContent = lesson.date || "";
+  qs("text").innerHTML = nl2br(lesson.text || "");
 
+  const gallery = qs("gallery");
   const imgs = Array.isArray(lesson.images) ? lesson.images : [];
-  const gallery = qs("lessonGallery");
 
   if(imgs.length === 0){
     gallery.innerHTML = `<p class="muted">Nema slika za ovu lekciju.</p>`;
     return;
   }
 
-  gallery.innerHTML = imgs.map(src => `
-    <a class="photo" href="${src}" target="_blank" rel="noopener">
-      <img src="${src}" alt="Slika" loading="lazy" />
-    </a>
-  `).join("");
-}
-async function loadLessonFromFolder(){
-  const parts = location.pathname.split("/");
-  const slug = parts[parts.length-2]; // folder name
-
-  const data = await fetchJson("/Knezija-krizmanici.io/data/kateheze.json");
-  const lesson = data.find(x => x.slug === slug);
-
-  if(!lesson){
-    document.getElementById("title").textContent = "Lekcija nije pronađena";
-    return;
-  }
-
-  document.title = lesson.title;
-  qs("title").textContent = lesson.title;
-  qs("date").textContent = lesson.date;
-  qs("text").innerHTML = nl2br(lesson.text);
-
-  const gallery = qs("gallery");
-  gallery.innerHTML = (lesson.images || []).map(img => `
+  gallery.innerHTML = imgs.map(img => `
     <div class="photoCard">
-      <img src="/Knezija-krizmanici.io/${img.src}" loading="lazy">
-      ${img.caption ? `<div class="caption">${img.caption}</div>` : ""}
+      <a class="photo" href="${BASE}/${img.src}" target="_blank" rel="noopener">
+        <img src="${BASE}/${img.src}" alt="Slika" loading="lazy" />
+      </a>
+      ${img.caption ? `<div class="caption">${escapeHtml(img.caption)}</div>` : ""}
       ${img.note ? `<div class="note">${formatText(img.note)}</div>` : ""}
     </div>
   `).join("");
