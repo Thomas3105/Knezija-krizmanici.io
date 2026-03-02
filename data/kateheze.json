@@ -59,10 +59,16 @@
         "text": "**Svetost = punina radosti.** To je kršćansko ime za pravu sreću. Sveci nisu samo kipovi u crkvama. Sveci žive i danas. To su ljudi kojima je Bog na prvom mjestu — važniji od novca, popularnosti ili prolaznih užitaka."
       },
 
-      {
-        "type": "paragraph",
-        "text": "To su ljudi koji zrače dobrotom. Njihove oči sjaje. Kraj njih se osjeća mir. U Bogu su pronašli svoje novo, veće i radosnije 'ja'."
-      },
+{
+  "type": "image",
+  "src": "../assets/images/ivan_pavao.png",
+  "caption": "Sv. Ivan Pavao II.",
+  "note": "Ne bojte se biti sveti!"
+},
+{
+  "type": "paragraph",
+  "text": "To su ljudi koji zrače dobrotom. Njihove oči sjaje. Kraj njih se osjeća mir. U Bogu su pronašli svoje novo, veće i radosnije 'ja'."
+},
 
       {
 
