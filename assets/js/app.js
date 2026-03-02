@@ -26,7 +26,7 @@ function nl2br(str){
 function formatText(str){
   if(!str) return "";
   return escapeHtml(str)
-    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    .replace(/\*\*(.*?)\*\*/g, "<h3 class='section-title'>$1</h3>")
     .replace(/\*(.*?)\*/g, "<i>$1</i>")
     .replaceAll("\n","<br>");
 }
