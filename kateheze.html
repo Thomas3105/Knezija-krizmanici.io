@@ -2,28 +2,27 @@
 <html lang="hr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kateheze</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <script defer src="assets/js/app.js"></script>
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container">
-      <div class="row">
-        <a class="btn" href="index.html">← Nazad</a>
-      </div>
-      <h1 class="title">Kateheze</h1>
-      <p class="subtitle">Klikni lekciju za posebnu stranicu (URL) + slike</p>
-    </div>
-  </header>
+  <div class="container">
+    <nav class="topnav">
+      <a href="index.html">← Nazad</a>
+    </nav>
 
-  <main class="container">
-    <div id="katehezeList"></div>
-  </main>
+    <h1>Kateheze</h1>
+    <p class="muted">Klikni lekciju za posebnu stranicu (URL) + slike</p>
 
-  <script src="assets/js/app.js"></script>
+    <div id="list"></div>
+  </div>
+
   <script>
-    renderKatehezeList("data/kateheze.json", "katehezeList");
+    // LISTA KATEHEZA
+    renderKatehezeList(`${BASE}/data/kateheze.json`, "list");
   </script>
 </body>
 </html>
