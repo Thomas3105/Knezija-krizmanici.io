@@ -71,8 +71,7 @@ async function loadLessonFromFolder(){
   document.title = lesson.title || "Kateheza";
   qs("title").textContent = lesson.title || "Kateheza";
   qs("date").textContent = lesson.date || "";
-  qs("text").innerHTML = nl2br(lesson.text || "");
-
+  qs("text").innerHTML = formatText(lesson.text || "");
   const imgs = Array.isArray(lesson.images) ? lesson.images : [];
   const gallery = qs("gallery");
 
