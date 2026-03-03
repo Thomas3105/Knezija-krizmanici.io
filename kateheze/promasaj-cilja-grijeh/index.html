@@ -1,32 +1,32 @@
 <!doctype html>
 <html lang="hr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Kateheza</title>
-  <link rel="stylesheet" href="../../assets/css/style.css" />
-  <script defer src="../../assets/js/app.js"></script>
-</head>
-
+<link rel="stylesheet" href="/Knezija-krizmanici.io/assets/css/style.css"></head>
 <body>
   <header class="topbar">
     <div class="container">
-      <nav class="topnav">
-        <a href="../../kateheze.html">← Sve kateheze</a>
-        <a href="../../index.html">Početna</a>
-      </nav>
-      <h1 id="title" class="title"></h1>
-      <p id="date" class="subtitle"></p>
+      <div class="row">
+        <a class="btn" href="../../kateheze.html">← Sve kateheze</a>
+        <a class="btn" href="../../index.html">Početna</a>
+      </div>
+      <h1 class="title" id="title"></h1>
+      <p class="subtitle" id="date"></p>
     </div>
   </header>
 
   <main class="container">
-    <div id="text" class="panel"></div>
-    <div id="gallery" class="gallery" style="margin-top:18px;"></div>
+    <section class="panel">
+      <div id="text" class="muted"></div>
+    </section>
+    <section id="gallery" class="gallery" style="margin-top:18px;"></section>
   </main>
 
+<script src="/Knezija-krizmanici.io/assets/js/app.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", loadLessonFromFolder);
+    loadLessonFromFolder();
   </script>
 </body>
 </html>
